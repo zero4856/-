@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="제로 상담소 - 마음이 편안해지는 따뜻한 상담 공간" />
+  <title>제로 상담소 | 마음이 쉬어가는 곳</title>
+  <style>
+    :root{
+      --ivory:#f7f2e9;
+      --cream:#fffaf2;
+      --sand:#d8c4a5;
+      --gold:#b89763;
+      --brown:#5d4936;
+      --deep:#2f3c35;
+      --sage:#849487;
+      --white:#ffffff;
+      --line:rgba(93,73,54,.14);
+      --shadow:0 22px 60px rgba(70,54,37,.12);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--brown);
+      background:var(--cream);
+      font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+      line-height:1.7;
+      word-break:keep-all;
+    }
+
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .wrap{width:min(1160px,calc(100% - 40px));margin:0 auto}
+
+    header{
+      position:fixed;
+      inset:0 0 auto 0;
+      z-index:100;
+      background:rgba(255,250,242,.86);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(93,73,54,.08);
+    }
+    .nav{
+      height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:-.04em;
+      font-size:1.2rem;
+    }
+    .brand-mark{
+      width:40px;height:40px;border-radius:50%;
+      display:grid;place-items:center;
+      color:var(--white);
+      background:linear-gradient(145deg,var(--deep),#53655b);
+      box-shadow:0 10px 28px rgba(47,60,53,.24);
+      font-family:Georgia,serif;
+      font-size:1.08rem;
+    }
+    .menu{display:flex;align-items:center;gap:28px;font-size:.95rem}
+    .menu a{opacity:.82}
+    .menu a:hover{opacity:1;color:var(--deep)}
+    .nav-cta{
+      padding:11px 18px;border-radius:999px;
+      background:var(--deep);color:#fff!important;
+      box-shadow:0 10px 24px rgba(47,60,53,.18);
+    }
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      padding:130px 0 70px;
+      background:
+        radial-gradient(circle at 12% 16%,rgba(216,196,165,.30),transparent 28%),
+        radial-gradient(circle at 88% 22%,rgba(132,148,135,.18),transparent 24%),
+        linear-gradient(180deg,#fffaf2 0%,#f6efe4 100%);
+      overflow:hidden;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.02fr .98fr;
+      align-items:center;
+      gap:64px;
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:.9rem;color:var(--gold);font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;
+    }
+    .eyebrow:before{content:"";width:34px;height:1px;background:var(--gold)}
+    h1{
+      margin:20px 0 22px;
+      font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+      font-weight:600;
+      font-size:clamp(2.8rem,6vw,5.7rem);
+      line-height:1.12;
+      letter-spacing:-.055em;
+      color:var(--deep);
+    }
+    h1 em{font-style:normal;color:var(--gold)}
+    .hero-copy{
+      max-width:610px;
+      font-size:1.08rem;
+      color:#715f4e;
+    }
+    .hero-actions{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:54px;padding:0 24px;border-radius:999px;
+      font-weight:700;transition:.25s ease;
+    }
+    .btn-primary{background:var(--deep);color:#fff;box-shadow:0 14px 34px rgba(47,60,53,.24)}
+    .btn-primary:hover{transform:translateY(-2px)}
+    .btn-secondary{border:1px solid var(--line);background:rgba(255,255,255,.55)}
+    .btn-secondary:hover{background:#fff}
+
+    .art-card{
+      position:relative;
+      min-height:590px;
+      border-radius:42px 42px 150px 42px;
+      overflow:hidden;
+      background:linear-gradient(155deg,#d9c9ae,#efe5d5 52%,#a7b1a8);
+      box-shadow:var(--shadow);
+      isolation:isolate;
+    }
+    .art-card:before{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 70% 18%,rgba(255,255,255,.78),transparent 23%),
+        linear-gradient(180deg,transparent 55%,rgba(47,60,53,.13));
+    }
+    .sun{
+      position:absolute;right:76px;top:62px;width:118px;height:118px;border-radius:50%;
+      background:rgba(255,248,224,.78);box-shadow:0 0 60px rgba(255,244,205,.8);
+    }
+    .arch{
+      position:absolute;left:64px;right:64px;bottom:0;height:74%;
+      border-radius:180px 180px 0 0;
+      border:2px solid rgba(255,255,255,.34);
+      border-bottom:none;
+    }
+    .sofa{
+      position:absolute;left:20%;right:14%;bottom:78px;height:132px;
+      background:#f2e9db;border-radius:32px 32px 20px 20px;
+      box-shadow:0 18px 45px rgba(75,58,39,.18);
+    }
+    .sofa:before,.sofa:after{
+      content:"";position:absolute;bottom:-20px;width:18px;height:28px;
+      background:#725c46;border-radius:0 0 8px 8px;
+    }
+    .sofa:before{left:42px}.sofa:after{right:42px}
+    .cushion{
+      position:absolute;left:33%;bottom:155px;width:95px;height:76px;border-radius:28px;
+      background:#bca47f;transform:rotate(-6deg);
+      box-shadow:0 10px 20px rgba(70,54,37,.12);
+    }
+    .table{
+      position:absolute;right:10%;bottom:58px;width:92px;height:92px;
+      border-radius:50%;background:#6c7d72;
+      box-shadow:0 14px 25px rgba(47,60,53,.25);
+    }
+    .table:after{
+      content:"";position:absolute;left:40px;top:78px;width:12px;height:70px;background:#58685e
+    }
+    .plant{
+      position:absolute;left:6%;bottom:80px;width:130px;height:250px;
+    }
+    .stem{position:absolute;left:62px;bottom:42px;width:6px;height:154px;background:#52685a;border-radius:4px}
+    .leaf{
+      position:absolute;width:64px;height:30px;background:#718979;
+      border-radius:100% 0 100% 0;transform-origin:right center;
+    }
+    .l1{left:6px;top:40px;transform:rotate(26deg)}
+    .l2{left:56px;top:74px;transform:scaleX(-1) rotate(14deg)}
+    .l3{left:0;top:106px;transform:rotate(12deg)}
+    .l4{left:60px;top:132px;transform:scaleX(-1) rotate(28deg)}
+    .pot{position:absolute;left:29px;bottom:0;width:76px;height:68px;background:#8a6d52;clip-path:polygon(10% 0,90% 0,75% 100%,25% 100%)}
+    .quote-card{
+      position:absolute;left:28px;top:30px;z-index:4;
+      max-width:230px;padding:20px 22px;border-radius:22px;
+      background:rgba(255,255,255,.72);backdrop-filter:blur(8px);
+      box-shadow:0 12px 35px rgba(70,54,37,.1);
+      font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+      color:var(--deep);font-size:.97rem;
+    }
+
+    section{padding:110px 0}
+    .section-kicker{color:var(--gold);font-weight:800;font-size:.86rem;letter-spacing:.12em;text-transform:uppercase}
+    .section-title{
+      margin:12px 0 18px;
+      font-family:"Noto Serif KR","Nanum Myeongjo",Georgia,serif;
+      font-size:clamp(2rem,4.5vw,3.5rem);
+      line-height:1.25;letter-spacing:-.045em;color:var(--deep);
+    }
+    .section-desc{max-width:680px;color:#7b6a59}
+
+    .services{background:#fffdf8}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px}
+    .card{
+      padding:34px;border-radius:28px;background:#fff;
+      border:1px solid var(--line);box-shadow:0 14px 38px rgba(75,58,39,.06);
+      transition:.25s ease;
+    }
+    .card:hover{transform:translateY(-5px);box-shadow:0 22px 48px rgba(75,58,39,.1)}
+    .icon{
+      width:56px;height:56px;border-radius:18px;
+      display:grid;place-items:center;background:var(--ivory);
+      font-size:1.4rem;margin-bottom:22px;
+    }
+    .card h3{margin:0 0 10px;color:var(--deep);font-size:1.22rem}
+    .card p{margin:0;color:#7c6a59;font-size:.96rem}
+
+    .process-grid{display:grid;grid-template-columns:.86fr 1.14fr;gap:70px;align-items:start}
+    .steps{display:grid;gap:16px}
+    .step{
+      display:grid;grid-template-columns:58px 1fr;gap:18px;
+      padding:24px;border-radius:24px;background:rgba(255,255,255,.62);border:1px solid var(--line)
+    }
+    .step-no{
+      width:48px;height:48px;border-radius:50%;
+      display:grid;place-items:center;background:var(--deep);color:#fff;font-weight:800
+    }
+    .step h4{margin:2px 0 6px;color:var(--deep)}
+    .step p{margin:0;color:#7b6a59;font-size:.94rem}
+
+    .cta{
+      padding:0 0 110px;
+      background:linear-gradient(180deg,var(--cream),#efe5d8);
+    }
+    .cta-box{
+      padding:64px;border-radius:38px;
+      background:linear-gradient(135deg,#34433b,#52665a);
+      color:#fff;display:flex;align-items:center;justify-content:space-between;gap:30px;
+      box-shadow:0 28px 70px rgba(47,60,53,.24);
+    }
+    .cta-box h2{
+      margin:0 0 12px;font-family:"Noto Serif KR","Nanum Myeongjo",serif;
+      font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-.04em;
+    }
+    .cta-box p{margin:0;color:rgba(255,255,255,.76)}
+    .cta-box .btn{background:#f1e1c4;color:var(--deep);white-space:nowrap}
+
+    footer{background:#25322c;color:rgba(255,255,255,.78);padding:56px 0 32px}
+    .footer-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:36px}
+    footer h4{color:#fff;margin:0 0 12px}
+    footer p{margin:5px 0;font-size:.92rem}
+    .copyright{margin-top:36px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);font-size:.84rem}
+
+    .floating{
+      position:fixed;right:24px;bottom:24px;z-index:90;
+      padding:15px 20px;border-radius:999px;background:#b89763;color:#fff;
+      box-shadow:0 15px 35px rgba(120,88,45,.28);font-weight:800;
+    }
+
+    @media (max-width:900px){
+      .menu a:not(.nav-cta){display:none}
+      .hero-grid,.process-grid{grid-template-columns:1fr}
+      .hero-grid{gap:42px}
+      .art-card{min-height:480px}
+      .cards{grid-template-columns:1fr}
+      .cta-box{flex-direction:column;align-items:flex-start;padding:42px 30px}
+      .footer-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .wrap{width:min(100% - 26px,1160px)}
+      .nav{height:68px}
+      .brand{font-size:1.02rem}
+      .nav-cta{padding:9px 13px}
+      .hero{padding-top:102px}
+      h1{font-size:2.65rem}
+      .hero-actions{flex-direction:column}
+      .btn{width:100%}
+      .art-card{min-height:420px;border-radius:28px 28px 90px 28px}
+      .quote-card{max-width:190px;font-size:.86rem}
+      section{padding:80px 0}
+      .card{padding:27px}
+      .cta{padding-bottom:80px}
+      .floating{right:14px;bottom:14px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a href="#home" class="brand" aria-label="제로 상담소 홈">
+        <span class="brand-mark">0</span>
+        <span>제로 상담소</span>
+      </a>
+      <nav class="menu">
+        <a href="#about">상담소 소개</a>
+        <a href="#services">상담 분야</a>
+        <a href="#process">상담 절차</a>
+        <a href="#contact" class="nav-cta">상담 예약</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">Zero Counseling Center</div>
+          <h1>마음의 무게를<br><em>잠시 내려놓는 곳</em></h1>
+          <p class="hero-copy">
+            제로 상담소는 당신의 이야기를 판단하지 않고 천천히 듣습니다.
+            복잡했던 마음이 조금 가벼워지고, 다시 나아갈 힘을 찾을 수 있도록 따뜻하게 곁에 있겠습니다.
+          </p>
+          <div class="hero-actions">
+            <!-- 아래 href 주소를 구글폼 예약 주소로 바꾸세요 -->
+            <a class="btn btn-primary" href="https://forms.google.com" target="_blank" rel="noopener">상담 예약하기</a>
+            <a class="btn btn-secondary" href="#services">상담 분야 보기</a>
+          </div>
+        </div>
+
+        <div class="art-card" aria-label="따뜻하고 편안한 상담 공간 일러스트">
+          <div class="quote-card">“당신의 마음이<br>다시 편안해질 때까지.”</div>
+          <div class="sun"></div>
+          <div class="arch"></div>
+          <div class="plant">
+            <span class="stem"></span>
+            <span class="leaf l1"></span><span class="leaf l2"></span>
+            <span class="leaf l3"></span><span class="leaf l4"></span>
+            <span class="pot"></span>
+          </div>
+          <div class="cushion"></div>
+          <div class="sofa"></div>
+          <div class="table"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <span class="section-kicker">About Us</span>
+        <h2 class="section-title">문제를 고치는 곳이 아니라,<br>마음을 이해하는 곳입니다.</h2>
+        <p class="section-desc">
+          누구에게나 말로 설명하기 어려운 순간이 있습니다. 제로 상담소는 안전하고 편안한 분위기 속에서
+          자신의 감정과 생각을 차분히 바라볼 수 있도록 돕습니다. 모든 상담 내용은 소중하게 다루며,
+          내담자의 속도와 선택을 존중합니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="services" id="services">
+      <div class="wrap">
+        <span class="section-kicker">Counseling</span>
+        <h2 class="section-title">당신에게 맞는 상담을 만나보세요.</h2>
+        <p class="section-desc">현재의 고민과 상황에 따라 상담 방향을 함께 정합니다.</p>
+
+        <div class="cards">
+          <article class="card">
+            <div class="icon">☘</div>
+            <h3>개인 상담</h3>
+            <p>불안, 우울, 스트레스, 자존감, 인간관계 등 마음속 어려움을 안전하게 이야기합니다.</p>
+          </article>
+          <article class="card">
+            <div class="icon">♡</div>
+            <h3>부부·관계 상담</h3>
+            <p>반복되는 갈등과 소통의 어려움을 이해하고 더 건강한 관계 방식을 함께 찾습니다.</p>
+          </article>
+          <article class="card">
+            <div class="icon">✦</div>
+            <h3>진로·성장 상담</h3>
+            <p>진로 고민, 번아웃, 삶의 방향에 대한 혼란을 정리하고 자신만의 기준을 세웁니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="wrap process-grid">
+        <div>
+          <span class="section-kicker">Process</span>
+          <h2 class="section-title">처음이라도<br>편안하게 시작하세요.</h2>
+          <p class="section-desc">
+            상담 신청 후 일정과 방법을 안내드립니다. 대면 상담과 비대면 상담 여부는 운영 방식에 맞게 수정해 주세요.
+          </p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-no">01</div>
+            <div><h4>상담 신청</h4><p>예약 신청서를 작성하거나 카카오톡으로 문의합니다.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-no">02</div>
+            <div><h4>일정 확인</h4><p>가능한 상담 시간을 확인한 뒤 예약을 확정합니다.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-no">03</div>
+            <div><h4>초기 상담</h4><p>현재의 어려움과 원하는 변화를 함께 살펴봅니다.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-no">04</div>
+            <div><h4>상담 진행</h4><p>개인의 속도와 상황을 존중하며 상담을 이어갑니다.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="wrap">
+        <div class="cta-box">
+          <div>
+            <h2>오늘, 마음을 위한 첫걸음</h2>
+            <p>혼자 견디지 않아도 괜찮습니다. 편안한 마음으로 문을 두드려 주세요.</p>
+          </div>
+          <!-- 아래 href 주소를 구글폼 또는 카카오톡 채널 주소로 바꾸세요 -->
+          <a class="btn" href="https://forms.google.com" target="_blank" rel="noopener">예약 문의하기</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <h4>제로 상담소</h4>
+          <p>마음이 쉬어가는 따뜻한 상담 공간</p>
+        </div>
+        <div>
+          <h4>운영 안내</h4>
+          <p>평일 10:00–20:00</p>
+          <p>토요일 10:00–16:00</p>
+          <p>일요일·공휴일 휴무</p>
+        </div>
+        <div>
+          <h4>문의</h4>
+          <p>전화: 010-0000-0000</p>
+          <p>이메일: hello@example.com</p>
+          <p>주소: 상담소 주소를 입력하세요</p>
+        </div>
+      </div>
+      <div class="copyright">© 2026 ZERO COUNSELING CENTER. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- 아래 href 주소를 실제 예약 주소로 바꾸세요 -->
+  <a class="floating" href="https://forms.google.com" target="_blank" rel="noopener">상담 예약</a>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(link=>{
+      link.addEventListener('click',e=>{
+        const target=document.querySelector(link.getAttribute('href'));
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({behavior:'smooth'});
+        }
+      });
+    });
+  </script>
+</body>
+</html>
