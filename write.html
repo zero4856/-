@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>익명 상담 신청 | 제로 상담소</title>
+
+<link rel="stylesheet" href="style-board.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js" defer></script>
+
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="index.html"><span class="mark">0</span>제로 상담소</a><a href="check.html">답변 확인</a></div></header>
+<main>
+<div class="wrap">
+<div class="eyebrow">Anonymous Counseling</div>
+<h1>익명 상담 신청</h1>
+<p class="lead">이름은 받지 않습니다. 상담번호와 비밀번호는 꼭 따로 보관해 주세요.</p>
+<section class="panel">
+<form id="consultationForm" class="grid">
+<div><label for="title">제목</label><input id="title" maxlength="100" required placeholder="고민 제목을 입력해 주세요"></div>
+<div><label for="category">상담 분야</label><select id="category"><option>개인 상담</option><option>부부 상담</option><option>진로 상담</option><option>기타</option></select></div>
+<div><label for="content">상담 내용</label><textarea id="content" maxlength="5000" required placeholder="전화번호, 주소, 주민번호 등 개인정보는 적지 말아 주세요."></textarea></div>
+<div><label for="password">답변 확인 비밀번호</label><input id="password" type="password" minlength="4" maxlength="30" required placeholder="4자 이상"></div>
+<label><input id="agree" type="checkbox" required style="width:auto"> 민감한 개인정보를 작성하지 않겠습니다.</label>
+<div class="actions"><button class="btn primary" type="submit">상담 접수</button><a class="btn secondary" href="index.html">취소</a></div>
+</form>
+<div id="result" class="result"></div>
+<div class="notice">즉각적인 위험이나 긴급한 도움이 필요한 상황에는 이 게시판이 아닌 지역 긴급기관을 이용해 주세요.</div>
+</section>
+</div>
+</main>
+<footer><div class="wrap">© 2026 ZERO COUNSELING</div></footer>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("consultationForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!ZERO_APP.ready) return ZERO_APP.needSetup();
+
+    const no = ZERO_APP.makeConsultationNo();
+    const passwordHash = await ZERO_APP.sha256(document.getElementById("password").value);
+
+    const row = {
+      consultation_no: no,
+      title: document.getElementById("title").value.trim(),
+      category: document.getElementById("category").value,
+      content: document.getElementById("content").value.trim(),
+      password_hash: passwordHash
+    };
+
+    const { error } = await ZERO_APP.client.from("consultations").insert(row);
+    if (error) {
+      alert("접수 중 오류가 발생했습니다: " + error.message);
+      return;
+    }
+
+    const result = document.getElementById("result");
+    result.style.display = "block";
+    result.innerHTML = `<div class="meta">상담이 접수되었습니다.</div>
+      <h2>${no}</h2>
+      <p>답변 확인에 필요한 상담번호입니다. 반드시 저장해 주세요.</p>
+      <a class="btn primary" href="check.html">답변 확인으로 이동</a>`;
+    event.target.reset();
+  });
+});
+</script>
+</body>
+</html>

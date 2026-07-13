@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>관리자 | 제로 상담소</title>
+
+<link rel="stylesheet" href="style-board.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js" defer></script>
+
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="index.html"><span class="mark">0</span>제로 상담소</a><a href="index.html">홈</a></div></header>
+<main>
+<div class="wrap">
+<div class="eyebrow">Administrator</div>
+<h1>상담 관리자</h1>
+<section class="panel">
+<div id="loginArea" class="grid">
+<div><label for="email">관리자 이메일</label><input id="email" type="email"></div>
+<div><label for="adminPassword">비밀번호</label><input id="adminPassword" type="password"></div>
+<button id="loginButton" class="btn primary">로그인</button>
+</div>
+<div id="managerArea" class="hidden">
+<div class="actions"><button id="loadButton" class="btn primary">상담 목록 불러오기</button><button id="logoutButton" class="btn secondary">로그아웃</button></div>
+<div id="consultationList" class="grid" style="margin-top:20px"></div>
+</div>
+</section>
+</div>
+</main>
+<footer><div class="wrap">관리자 전용</div></footer>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const loginArea = document.getElementById("loginArea");
+  const managerArea = document.getElementById("managerArea");
+  const list = document.getElementById("consultationList");
+
+  async function syncLogin(){
+    const { data } = await ZERO_APP.client.auth.getSession();
+    const loggedIn = Boolean(data.session);
+    loginArea.classList.toggle("hidden", loggedIn);
+    managerArea.classList.toggle("hidden", !loggedIn);
+  }
+
+  document.getElementById("loginButton").addEventListener("click", async () => {
+    if (!ZERO_APP.ready) return ZERO_APP.needSetup();
+    const { error } = await ZERO_APP.client.auth.signInWithPassword({
+      email: document.getElementById("email").value,
+      password: document.getElementById("adminPassword").value
+    });
+    if (error) return alert(error.message);
+    await syncLogin();
+  });
+
+  document.getElementById("logoutButton").addEventListener("click", async () => {
+    await ZERO_APP.client.auth.signOut();
+    await syncLogin();
+  });
+
+  document.getElementById("loadButton").addEventListener("click", async () => {
+    const { data, error } = await ZERO_APP.client
+      .from("consultations")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) return alert(error.message);
+    list.innerHTML = "";
+
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "panel";
+      card.innerHTML = `<div class="meta">${item.consultation_no} · ${item.status}</div>
+        <h3>${item.title}</h3>
+        <p class="answer">${item.content}</p>
+        <textarea data-id="${item.id}" placeholder="답변 입력">${item.answer || ""}</textarea>
+        <div class="actions"><button class="btn primary saveButton" data-id="${item.id}">답변 저장</button></div>`;
+      list.appendChild(card);
+    });
+
+    document.querySelectorAll(".saveButton").forEach(button => {
+      button.addEventListener("click", async () => {
+        const id = button.dataset.id;
+        const textarea = document.querySelector(`textarea[data-id="${id}"]`);
+        const { error } = await ZERO_APP.client
+          .from("consultations")
+          .update({
+            answer: textarea.value,
+            status: "답변 완료",
+            answered_at: new Date().toISOString()
+          })
+          .eq("id", id);
+
+        if (error) alert(error.message);
+        else alert("답변을 저장했습니다.");
+      });
+    });
+  });
+
+  if (ZERO_APP.ready) syncLogin();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>답변 확인 | 제로 상담소</title>
+
+<link rel="stylesheet" href="style-board.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js" defer></script>
+
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="index.html"><span class="mark">0</span>제로 상담소</a><a href="write.html">상담 신청</a></div></header>
+<main>
+<div class="wrap">
+<div class="eyebrow">Check Answer</div>
+<h1>상담 답변 확인</h1>
+<p class="lead">상담번호와 비밀번호를 입력하면 본인의 상담 내용과 답변만 확인할 수 있습니다.</p>
+<section class="panel">
+<form id="checkForm" class="grid">
+<div><label for="consultationNo">상담번호</label><input id="consultationNo" required placeholder="ZERO-20260713-ABCDE"></div>
+<div><label for="password">비밀번호</label><input id="password" type="password" required></div>
+<div class="actions"><button class="btn primary" type="submit">답변 확인</button><a class="btn secondary" href="index.html">홈으로</a></div>
+</form>
+<div id="result" class="result"></div>
+</section>
+</div>
+</main>
+<footer><div class="wrap">© 2026 ZERO COUNSELING</div></footer>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("checkForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!ZERO_APP.ready) return ZERO_APP.needSetup();
+
+    const no = document.getElementById("consultationNo").value.trim();
+    const passwordHash = await ZERO_APP.sha256(document.getElementById("password").value);
+
+    const { data, error } = await ZERO_APP.client.rpc("get_consultation", {
+      p_no: no,
+      p_password_hash: passwordHash
+    });
+
+    if (error || !data || data.length === 0) {
+      alert("상담번호 또는 비밀번호가 맞지 않습니다.");
+      return;
+    }
+
+    const item = data[0];
+    const result = document.getElementById("result");
+    result.style.display = "block";
+    result.innerHTML = `<div class="meta">${item.status}</div>
+      <h2>${item.title}</h2>
+      <h3>상담 내용</h3>
+      <p class="answer">${item.content}</p>
+      <hr>
+      <h3>상담 답변</h3>
+      <p class="answer">${item.answer || "아직 답변이 등록되지 않았습니다."}</p>`;
+  });
+});
+</script>
+</body>
+</html>
